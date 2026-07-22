@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Чек-лист открытия ТОО</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(145deg, #f4f9fe 0%, #e6eef7 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+    }
+
+    .card {
+      max-width: 900px;
+      width: 100%;
+      background-color: #ffffff;
+      border-radius: 2.5rem;
+      box-shadow: 0 20px 40px -12px rgba(0, 20, 30, 0.2), 0 8px 24px -8px rgba(0, 0, 0, 0.06);
+      padding: 2.5rem 2rem 2rem;
+      transition: all 0.2s;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+    }
+
+    .header-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.2rem;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: #0a2b3b;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .badge-too {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.25rem 1rem;
+      border-radius: 30px;
+      background: #d4e3ef;
+      color: #1b4f69;
+      letter-spacing: 0.3px;
+    }
+
+    .subhead {
+      font-size: 1rem;
+      color: #2c5770;
+      border-left: 4px solid #2f7fa8;
+      padding-left: 1rem;
+      margin: 0.5rem 0 1.8rem 0;
+      font-weight: 400;
+      background: #eef5fa;
+      border-radius: 0 12px 12px 0;
+      line-height: 1.4;
+      padding: 0.7rem 1.2rem;
+      background: #eef6fc;
+    }
+
+    .progress-wrapper {
+      background: #dde8f2;
+      border-radius: 60px;
+      height: 10px;
+      margin-bottom: 1.5rem;
+      box-shadow: inset 0 1px 4px rgba(0,0,0,0.04);
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #1f6d92, #3b9bcf);
+      border-radius: 60px;
+      transition: width 0.25s ease;
+      box-shadow: 0 0 10px rgba(33, 115, 160, 0.25);
+    }
+
+    .stats {
+      display: flex;
+      justify-content: flex-end;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #1a4b62;
+      margin-bottom: 1.8rem;
+      gap: 0.3rem;
+    }
+
+    .stats span {
+      background: #d6e4f0;
+      padding: 0.25rem 1.2rem;
+      border-radius: 40px;
+      font-size: 0.85rem;
+    }
+
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      margin-bottom: 2rem;
+    }
+
+    .step-item {
+      background: #fafdff;
+      border-radius: 18px;
+      padding: 0.8rem 1.2rem 0.8rem 1.4rem;
+      box-shadow: 0 2px 8px rgba(0, 30, 40, 0.02);
+      border: 1px solid #dfeaf3;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .step-item:hover {
+      background: #f4faff;
+      border-color: #b8d0e3;
+      box-shadow: 0 4px 12px rgba(20, 70, 100, 0.05);
+    }
+
+    .step-item.completed {
+      background: #eef7f1;
+      border-color: #85b7a4;
+      opacity: 0.9;
+    }
+
+    .step-item.completed .step-text {
+      text-decoration: line-through;
+      color: #1f5442;
+    }
+
+    .step-check {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      background: white;
+      border-radius: 30px;
+      border: 2px solid #b8cee0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.15s;
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .step-item.completed .step-check {
+      background: #147a56;
+      border-color: #147a56;
+      color: white;
+    }
+
+    .step-check svg {
+      width: 14px;
+      height: 14px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .step-text {
+      flex: 1;
+      font-size: 0.95rem;
+      color: #113645;
+      line-height: 1.4;
+      font-weight: 450;
+    }
+
+    .step-tag {
+      font-size: 0.6rem;
+      font-weight: 600;
+      padding: 0.1rem 0.7rem;
+      border-radius: 30px;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+      background: #d4e3ef;
+      color: #1b4f69;
+      margin-left: 0.5rem;
+    }
+
+    .step-item.completed .step-tag {
+      opacity: 0.7;
+    }
+
+    .reset-area {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-reset {
+      background: transparent;
+      border: 1px solid #c7dbea;
+      padding: 0.5rem 2rem;
+      border-radius: 60px;
+      font-weight: 500;
+      color: #2f5d78;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.2s;
+      background: #eef5fc;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-reset:hover {
+      background: #dce8f4;
+      border-color: #8fb0cb;
+      color: #0b3348;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+
+    .footnote {
+      margin-top: 1.5rem;
+      font-size: 0.78rem;
+      color: #3d6a81;
+      border-top: 1px dashed #c5dbe9;
+      padding-top: 1.2rem;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .footnote span {
+      background: #e8f0f8;
+      padding: 0.15rem 1rem;
+      border-radius: 30px;
+    }
+
+    @media (max-width: 550px) {
+      .card { padding: 1.5rem 1rem; }
+      .step-item { padding: 0.7rem 0.8rem 0.7rem 1rem; flex-wrap: wrap; }
+      .step-text { font-size: 0.88rem; }
+      .step-tag { font-size: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card" role="main">
+    <div class="header-row">
+      <h1>
+        <span>📋 Чек-лист</span>
+        <span style="font-size: 1rem; font-weight: 400; color: #2d6f8c; margin-left: 0.5rem;">открытие ТОО</span>
+      </h1>
+      <span class="badge-too">ТОО</span>
+    </div>
+    <div class="subhead">
+      🚀 12 шагов для регистрации ТОО в Казахстане
+    </div>
+
+    <!-- Прогресс -->
+    <div class="progress-wrapper" aria-label="Прогресс выполнения">
+      <div class="progress-bar" id="progressBar" style="width: 0%;"></div>
+    </div>
+
+    <div class="stats">
+      <span id="counterDisplay">0 / 12</span>
+    </div>
+
+    <!-- Список шагов (12 пунктов) -->
+    <div class="step-list" id="stepList">
+      <div class="step-item" data-step="1">
+        <div class="step-check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="step-text">Проверено уникальное название ТОО.</div>
+      </div>
+
+      <div class="step-item" data-step="2">
+        <div class="step-check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="step-text">Подготовлены: решение о создании, устав, учредительный договор (при нескольких участниках), приказ о назначении директора.</div>
+      </div>
+
+      <div class="step-item" data-step="3">
+        <div class="step-check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="step-text">Выбран основной и дополнительные коды ОКЭД.</div>
+      </div>
+
+      <div class="step-item" data-step="4">
+        <div class="step-check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="step-text">Определён и подтверждён юридический адрес.</div>
+      </div>
+
+      <div class="step-item" data-step="5">
+        <div class="step-check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="step-text">Подана заявка на регистрацию — через eGov или ЦОН.</div>
+      </div>
+
+      <div class="step-item" data-step="6">
+        <div class="step-check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="step-text">Получена справка о государственной регистрации и БИН.</div>
+      </div>
+
+      <div class="step-item" data-step="7">
+        <div class="step-check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="step-text">Открыт расчётный счёт в банке.</div>
+      </div>
+
+      <div class="step-item" data-step="8">
+        <div class="step-check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="step-text">Подано уведомление о применяемом налоговом режиме (в течение 5 рабочих дней).</div>
+      </div>
+
+      <div class="step-item" data-step="9">
+        <div class="step-check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="step-text">Оформлено страхование работников от несчастных случаев (при наличии сотрудников).</div>
+      </div>
+
+      <div class="step-item" data-step="10">
+        <div class="step-check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="step-text">Приобретена и зарегистрирована ККМ (при приёме наличных или карт).</div>
+      </div>
+
+      <div class="step-item" data-step="11">
+        <div class="step-check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="step-text">Получена лицензия для лицензируемого вида деятельности (при необходимости).</div>
+      </div>
+
+      <div class="step-item" data-step="12">
+        <div class="step-check" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="step-text">Заказана печать компании.</div>
+      </div>
+    </div>
+
+    <div class="reset-area">
+      <button class="btn-reset" id="resetBtn">Сбросить все шаги</button>
+    </div>
+
+    <div class="footnote">
+      <span>✅ Нажмите на шаг, чтобы отметить</span>
+      <span>💾 прогресс сохраняется в браузере</span>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const STORAGE_KEY = 'too_checklist_12steps';
+      const TOTAL_STEPS = 12;
+
+      const stepItems = document.querySelectorAll('.step-item');
+      const progressBar = document.getElementById('progressBar');
+      const counterDisplay = document.getElementById('counterDisplay');
+      const resetBtn = document.getElementById('resetBtn');
+
+      function loadState() {
+        try {
+          const stored = localStorage.getItem(STORAGE_KEY);
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed) && parsed.length === TOTAL_STEPS) {
+              return parsed;
+            }
+          }
+        } catch (e) {}
+        return new Array(TOTAL_STEPS).fill(false);
+      }
+
+      let completed = loadState();
+
+      function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(completed));
+      }
+
+      function updateUI() {
+        stepItems.forEach((item, index) => {
+          const isCompleted = completed[index] || false;
+          item.classList.toggle('completed', isCompleted);
+          item.setAttribute('aria-checked', isCompleted ? 'true' : 'false');
+        });
+
+        const doneCount = completed.filter(Boolean).length;
+        const percent = (doneCount / TOTAL_STEPS) * 100;
+        progressBar.style.width = percent + '%';
+        counterDisplay.textContent = `${doneCount} / ${TOTAL_STEPS}`;
+      }
+
+      function toggleStep(index) {
+        if (index < 0 || index >= TOTAL_STEPS) return;
+        completed[index] = !completed[index];
+        saveState();
+        updateUI();
+      }
+
+      function resetAll() {
+        completed = new Array(TOTAL_STEPS).fill(false);
+        saveState();
+        updateUI();
+      }
+
+      function handleStepClick(e) {
+        const item = e.currentTarget;
+        const stepAttr = item.getAttribute('data-step');
+        if (!stepAttr) return;
+        const index = parseInt(stepAttr, 10) - 1;
+        if (isNaN(index) || index < 0 || index >= TOTAL_STEPS) return;
+        toggleStep(index);
+      }
+
+      function init() {
+        stepItems.forEach((item) => {
+          item.addEventListener('click', handleStepClick);
+          item.setAttribute('role', 'checkbox');
+          item.setAttribute('tabindex', '0');
+          item.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              const stepAttr = item.getAttribute('data-step');
+              if (!stepAttr) return;
+              const index = parseInt(stepAttr, 10) - 1;
+              if (!isNaN(index) && index >= 0 && index < TOTAL_STEPS) {
+                toggleStep(index);
+              }
+            }
+          });
+        });
+
+        resetBtn.addEventListener('click', resetAll);
+        updateUI();
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
